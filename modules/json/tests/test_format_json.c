@@ -175,7 +175,7 @@ int
 main(int argc G_GNUC_UNUSED, char *argv[] G_GNUC_UNUSED)
 {
   app_startup();
-  putenv("TZ=UTC");
+  setenv("TZ", "UTC", TRUE);
   tzset();
   init_template_tests();
   cfg_load_module(configuration, "json-plugin");
