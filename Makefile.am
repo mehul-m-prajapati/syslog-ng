@@ -41,12 +41,61 @@ pkgconfig_DATA		= syslog-ng.pc
 
 AM_CPPFLAGS		= -I$(top_srcdir)/lib -I$(top_srcdir)/modules -I$(top_builddir)/lib -I$(top_builddir)/modules
 
-AM_CFLAGS =
+
+# configure script gives us -g and/or -O2, but all warning related settings
+# should be here
+
+AM_CFLAGS = -Wall \
+	-Wshadow \
+	-fno-common
+
 if ENABLE_EXTRA_WARNINGS
+
 AM_CFLAGS += \
-	-Wshadow	\
-	-Wno-initializer-overrides \
-	-Wno-error=deprecated-declarations
+	-Wno-override-init \
+	-Wignored-qualifiers \
+	-Wmissing-parameter-type \
+	-Wold-style-declaration \
+	-Wuninitialized \
+	-Wunused-but-set-parameter \
+	-Wcast-align \
+	-Wdeprecated \
+	-Wdeprecated-declarations \
+	-Wimplicit-function-declaration \
+	-Wmissing-format-attribute \
+	-Woverflow \
+	\
+	-Wno-error=aggregate-return -Waggregate-return \
+	-Wno-error=bad-function-cast -Wbad-function-cast \
+	-Wno-error=cast-qual -Wcast-qual \
+	-Wno-error=conversion -Wconversion \
+	-Wno-error=double-promotion -Wdouble-promotion \
+	-Wno-error=float-equal -Wfloat-equal \
+	-Wno-error=format-nonliteral -Wformat=2 \
+	-Wno-error=inline -Winline \
+	-Wno-error=missing-declarations -Wmissing-declarations \
+	-Wno-error=missing-format-attribute \
+	-Wno-error=missing-prototypes -Wmissing-prototypes \
+	-Wno-error=nested-externs -Wnested-externs \
+	-Wno-error=pointer-arith -Wpointer-arith \
+	-Wno-error=pointer-sign -Wpointer-sign \
+	-Wno-error=redundant-decls -Wredundant-decls \
+	-Wno-error=sign-compare \
+	-Wno-error=sign-conversion -Wsign-conversion \
+	-Wno-error=strict-overflow \
+	-Wno-error=strict-prototypes -Wstrict-prototypes \
+	-Wno-error=suggest-attribute=const -Wsuggest-attribute=const \
+	-Wno-error=suggest-attribute=noreturn -Wsuggest-attribute=noreturn \
+	-Wno-error=suggest-attribute=pure -Wsuggest-attribute=pure \
+	-Wno-error=switch-default -Wswitch-default \
+	-Wno-error=type-limits \
+	-Wno-error=undef -Wundef \
+	-Wno-error=write-strings \
+	\
+	-Wno-missing-field-initializers \
+	-Wno-stack-protector \
+	-Wno-unused-parameter \
+	-Wno-variadic-macros
 endif
 
 TEST_CFLAGS		= -I$(top_srcdir)/libtest $(AM_CFLAGS)
