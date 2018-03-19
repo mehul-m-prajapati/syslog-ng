@@ -44,6 +44,27 @@ _py_get_callable_name(PyObject *callable, gchar *buf, gsize buf_len)
   return buf;
 }
 
+void
+_py_log_python_traceback_to_stderr_in_debug_mode(void)
+{
+  PyObject *traceback_module;
+  PyObject *print_exception;
+  PyObject *res;
+  PyObject *exc, *value, *tb;
+
+  PyErr_Fetch(&exc, &value, &tb);
+
+  /* NOTE: no reference returned */
+  traceback_module = PyImport_AddModule("traceback");
+  print_exception = PyObject_GetAttrString(traceback_module, "print_exception");
+  res = PyObject_CallFunction(print_exception, "OOO", exc, value, tb);
+  if (!res)
+    PyErr_Clear();
+  Py_XDECREF(print_exception);
+  Py_XDECREF(res);
+  PyErr_Restore(exc, value, tb);
+}
+
 const gchar *
 _py_format_exception_text(gchar *buf, gsize buf_len)
 {
@@ -77,6 +98,7 @@ _py_format_exception_text(gchar *buf, gsize buf_len)
 void
 _py_finish_exception_handling(void)
 {
+  _py_log_python_traceback_to_stderr_in_debug_mode();
   PyErr_Clear();
 }
 
