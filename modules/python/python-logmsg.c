@@ -68,7 +68,7 @@ _is_key_blacklisted(const gchar *key)
 }
 
 static PyObject *
-_py_log_message_getattr(PyObject *o, PyObject *key)
+_py_log_message_subscript(PyObject *o, PyObject *key)
 {
   if (!_py_is_string(key))
     {
@@ -80,8 +80,7 @@ _py_log_message_getattr(PyObject *o, PyObject *key)
 
   if (_is_key_blacklisted(name))
     {
-      msg_error("Blacklisted attribute requested", evt_tag_str("key", name));
-      PyErr_Format(PyExc_AttributeError, "Blacklisted attribute %s was requested", name);
+      PyErr_Format(PyExc_KeyError, "Blacklisted attribute %s was requested", name);
       return NULL;
     }
   NVHandle handle = log_msg_get_value_handle(name);
@@ -91,7 +90,7 @@ _py_log_message_getattr(PyObject *o, PyObject *key)
 
   if (!value)
     {
-      PyErr_Format(PyExc_AttributeError, "No such attribute %s", name);
+      PyErr_Format(PyExc_KeyError, "No such name-value pair %s", name);
       return NULL;
     }
 
@@ -101,7 +100,7 @@ _py_log_message_getattr(PyObject *o, PyObject *key)
 }
 
 static int
-_py_log_message_setattr(PyObject *o, PyObject *key, PyObject *value)
+_py_log_message_ass_subscript(PyObject *o, PyObject *key, PyObject *value)
 {
   if (!_py_is_string(key))
     {
@@ -115,10 +114,7 @@ _py_log_message_setattr(PyObject *o, PyObject *key, PyObject *value)
 
   if (log_msg_is_write_protected(msg))
     {
-      msg_warning("Log message is read only, cannot set attribute, you are possibly trying to change a message from a destination which is not supported",
-                  evt_tag_str("name", name),
-                  evt_tag_printf("msg", "%p", msg));
-      PyErr_Format(PyExc_TypeError, "Log message is read only, cannot set attribute %s", name);
+      PyErr_Format(PyExc_TypeError, "Log message is read only, cannot set attribute %s, you are possibly trying to change a LogMessage from a destination driver", name);
       return -1;
     }
 
@@ -131,10 +127,7 @@ _py_log_message_setattr(PyObject *o, PyObject *key, PyObject *value)
     }
   else
     {
-      msg_warning("Cannot set name-value pair through LogMessage attribute, value is not a string type",
-                  evt_tag_str("name", name),
-                  evt_tag_str("type", value->ob_type->tp_name));
-      PyErr_Format(PyExc_ValueError, "String or string-like object expected as log message values, attribute %s", name);
+      PyErr_Format(PyExc_ValueError, "String or string-like object expected as log message values, attribute %s, type %s", name, value->ob_type->tp_name);
       return -1;
     }
 
@@ -164,8 +157,8 @@ py_log_message_new(LogMessage *msg)
 static PyMappingMethods py_log_message_mapping =
 {
   .mp_length = NULL,
-  .mp_subscript = (binaryfunc) _py_log_message_getattr,
-  .mp_ass_subscript = (objobjargproc) _py_log_message_setattr
+  .mp_subscript = (binaryfunc) _py_log_message_subscript,
+  .mp_ass_subscript = (objobjargproc) _py_log_message_ass_subscript
 };
 
 static gboolean
@@ -253,7 +246,7 @@ static PyTypeObject py_log_message_type =
 };
 
 void
-python_log_message_init(void)
+py_log_message_init(void)
 {
   PyType_Ready(&py_log_message_type);
 }
