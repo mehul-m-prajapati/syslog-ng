@@ -28,7 +28,7 @@
 
 #include "cfg.h"
 
-MsgFormatOptions parse_options;
+extern MsgFormatOptions parse_options;
 
 void
 stardate_assert(const gchar *msg_str, const int precision, const gchar *expected)
