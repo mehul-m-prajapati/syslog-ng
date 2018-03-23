@@ -67,21 +67,22 @@ AM_CFLAGS += \
 	\
 	-Wno-error=aggregate-return -Waggregate-return \
 	-Wno-error=bad-function-cast -Wbad-function-cast \
-	-Wno-error=cast-qual -Wcast-qual \
-	-Wno-error=conversion -Wconversion \
+	-Wno-error=cast-qual -Wno-cast-qual \
+	-Wno-error=conversion -Wno-conversion \
 	-Wno-error=double-promotion -Wdouble-promotion \
 	-Wno-error=float-equal -Wfloat-equal \
 	-Wno-error=format-nonliteral -Wformat=2 \
 	-Wno-error=inline -Winline \
-	-Wno-error=missing-declarations -Wmissing-declarations \
+	-Wno-error=missing-declarations -Wno-missing-declarations \
 	-Wno-error=missing-format-attribute \
-	-Wno-error=missing-prototypes -Wmissing-prototypes \
+	-Wno-error=missing-prototypes -Wno-missing-prototypes \
+	-Wno-error=strict-prototypes -Wno-strict-prototypes \
 	-Wno-error=nested-externs -Wnested-externs \
 	-Wno-error=pointer-arith -Wpointer-arith \
 	-Wno-error=pointer-sign -Wpointer-sign \
-	-Wno-error=redundant-decls -Wredundant-decls \
+	-Wno-error=redundant-decls -Wno-redundant-decls \
 	-Wno-error=sign-compare \
-	-Wno-error=sign-conversion -Wsign-conversion \
+	-Wno-error=sign-conversion -Wno-sign-conversion \
 	-Wno-error=strict-overflow \
 	-Wno-error=strict-prototypes -Wstrict-prototypes \
 	-Wno-error=suggest-attribute=const -Wsuggest-attribute=const \
