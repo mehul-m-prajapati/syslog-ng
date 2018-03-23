@@ -724,7 +724,10 @@ tls_context_new(TLSMode mode)
   if (self->mode == TM_CLIENT)
     self->ssl_ctx = SSL_CTX_new(SSLv23_client_method());
   else
-    self->ssl_ctx = SSL_CTX_new(SSLv23_server_method());
+    {
+      self->ssl_ctx = SSL_CTX_new(SSLv23_server_method());
+      SSL_CTX_set_session_id_context(self->ssl_ctx, "syslog", 6);
+    }
 
   return self;
 }
