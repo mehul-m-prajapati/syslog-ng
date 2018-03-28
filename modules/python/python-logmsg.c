@@ -79,7 +79,8 @@ _py_log_message_getattr(PyObject *o, PyObject *key)
 
   if (_is_key_blacklisted(name))
     {
-      msg_error("Blacklisted attribute requested", evt_tag_str("key", name));
+      msg_error("Blacklisted attribute requested",
+                evt_tag_str("key", name));
       return NULL;
     }
   NVHandle handle = log_msg_get_value_handle(name);
@@ -130,7 +131,8 @@ _py_log_message_setattr(PyObject *o, PyObject *key, PyObject *value)
     }
   else
     {
-      msg_warning("Cannot set value in logmsg", evt_tag_str("name", name));
+      msg_warning("Cannot set value in logmsg",
+                  evt_tag_str("name", name));
     }
 
   return 0;

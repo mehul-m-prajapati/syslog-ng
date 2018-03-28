@@ -69,7 +69,8 @@ _create_file_reader(WildcardSourceDriver *self, const gchar *full_path)
   log_pipe_append(&reader->super, &self->super.super.super);
   if (!log_pipe_init(&reader->super))
     {
-      msg_warning("File reader initialization failed", evt_tag_str("filename", full_path),
+      msg_warning("File reader initialization failed",
+                  evt_tag_str("filename", full_path),
                   evt_tag_str("source_driver", self->super.super.group));
       log_pipe_unref(&reader->super);
     }
@@ -94,7 +95,8 @@ _handle_file_created(WildcardSourceDriver *self, const DirectoryMonitorEvent *ev
         {
           if (!log_pipe_init(&reader->super))
             {
-              msg_error("Can not re-initialize reader for file", evt_tag_str("filename", event->full_path));
+              msg_error("Can not re-initialize reader for file",
+                        evt_tag_str("filename", event->full_path));
             }
         }
     }
@@ -105,7 +107,8 @@ _handle_directory_created(WildcardSourceDriver *self, const DirectoryMonitorEven
 {
   if (self->recursive)
     {
-      msg_debug("Directory created", evt_tag_str("name", event->full_path));
+      msg_debug("Directory created",
+                evt_tag_str("name", event->full_path));
       DirectoryMonitor *monitor = g_hash_table_lookup(self->directory_monitors, event->full_path);
       if (!monitor)
         {
@@ -121,13 +124,15 @@ _handle_deleted(WildcardSourceDriver *self, const DirectoryMonitorEvent *event)
 
   if (reader)
     {
-      msg_debug("Monitored file is deleted", evt_tag_str("filename", event->full_path));
+      msg_debug("Monitored file is deleted",
+                evt_tag_str("filename", event->full_path));
       log_pipe_deinit(&reader->super);
       file_reader_remove_persist_state(reader);
     }
   else if (g_hash_table_remove(self->directory_monitors, event->full_path))
     {
-      msg_debug("Monitored directory is deleted", evt_tag_str("directory", event->full_path));
+      msg_debug("Monitored directory is deleted",
+                evt_tag_str("directory", event->full_path));
     }
 }
 
@@ -293,7 +298,8 @@ wildcard_sd_set_monitor_method(LogDriver *s, const gchar *method)
 
   if (new_method == MM_UNKNOWN)
     {
-      msg_error("Invalid monitor-method", evt_tag_str("monitor-method", method));
+      msg_error("Invalid monitor-method",
+                evt_tag_str("monitor-method", method));
       return FALSE;
     }
   self->monitor_method = new_method;
