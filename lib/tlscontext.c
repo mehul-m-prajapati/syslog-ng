@@ -602,15 +602,15 @@ _are_key_and_cert_files_accessible(TLSContext *self)
 }
 
 static gboolean
-_client_key_and_cert_files_are_not_specified(TLSContext *self)
+_key_and_cert_files_are_not_specified(TLSContext *self)
 {
-  return self->mode == TM_CLIENT && (!self->key_file && !self->cert_file);
+  return (!self->key_file && !self->cert_file);
 }
 
 static TLSContextLoadResult
 tls_context_load_key_and_cert(TLSContext *self)
 {
-  if (_client_key_and_cert_files_are_not_specified(self))
+  if (_key_and_cert_files_are_not_specified(self))
     return TLS_CONTEXT_OK;
 
   if (!_are_key_and_cert_files_accessible(self))
