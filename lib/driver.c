@@ -162,7 +162,7 @@ log_src_driver_deinit_method(LogPipe *s)
 }
 
 void
-log_src_driver_queue_method(LogPipe *s, LogMessage *msg, const LogPathOptions *path_options, gpointer user_data)
+log_src_driver_queue_method(LogPipe *s, LogMessage *msg, const LogPathOptions *path_options)
 {
   LogSrcDriver *self = (LogSrcDriver *) s;
   GlobalConfig *cfg = log_pipe_get_config(s);
@@ -235,7 +235,7 @@ log_dest_driver_release_queue_method(LogDestDriver *self, LogQueue *q, gpointer 
 }
 
 void
-log_dest_driver_queue_method(LogPipe *s, LogMessage *msg, const LogPathOptions *path_options, gpointer user_data)
+log_dest_driver_queue_method(LogPipe *s, LogMessage *msg, const LogPathOptions *path_options)
 {
   LogDestDriver *self = (LogDestDriver *) s;
 

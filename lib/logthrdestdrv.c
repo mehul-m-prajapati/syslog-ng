@@ -418,8 +418,7 @@ log_threaded_dest_driver_free(LogPipe *s)
 
 static void
 log_threaded_dest_driver_queue(LogPipe *s, LogMessage *msg,
-                               const LogPathOptions *path_options,
-                               gpointer user_data)
+                               const LogPathOptions *path_options)
 {
   LogThrDestDriver *self = (LogThrDestDriver *)s;
   LogPathOptions local_options;
@@ -435,7 +434,7 @@ log_threaded_dest_driver_queue(LogPipe *s, LogMessage *msg,
 
   stats_counter_inc(self->processed_messages);
 
-  log_dest_driver_queue_method(s, msg, path_options, user_data);
+  log_dest_driver_queue_method(s, msg, path_options);
 }
 
 void
