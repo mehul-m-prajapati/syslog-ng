@@ -819,8 +819,8 @@ _pem_passwd_callback(char *buf, int size, int rwflag, void *user_data)
     {
       len = size;
       msg_warning("Password is too long, will be truncated",
-                  evt_tag_int("original length", secret->len),
-                  evt_tag_int("truncated length", size));
+                  evt_tag_int("original_length", secret->len),
+                  evt_tag_int("truncated_length", size));
     }
   memcpy(buf, secret->data, len);
   secret_storage_put_secret(secret);
