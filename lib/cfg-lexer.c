@@ -946,17 +946,21 @@ relex:
           free(yylval->cptr);
           cfg_args_unref(args);
 
-          cfg_block_generator_format_name(gen, buf, sizeof(buf));
-
-          if (gen->suppress_backticks)
-            success = cfg_lexer_include_buffer_without_backtick_substitution(self, buf, result->str, result->len);
-          else
-            success = cfg_lexer_include_buffer(self, buf, result->str, result->len);
-          g_string_free(result, TRUE);
-
           if (success)
             {
+              cfg_block_generator_format_name(gen, buf, sizeof(buf));
+
+              if (gen->suppress_backticks)
+                success = cfg_lexer_include_buffer_without_backtick_substitution(self, buf, result->str, result->len);
+              else
+                success = cfg_lexer_include_buffer(self, buf, result->str, result->len);
+              g_string_free(result, TRUE);
+
               goto relex;
+            }
+          else
+            {
+              g_string_free(result, TRUE);
             }
         }
       else
