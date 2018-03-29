@@ -103,7 +103,7 @@ image-%:
 login: login-$(DEFAULT_IMAGE)
 login-%: setup
 	container=`$(DOCKER) ps | grep syslog-ng-$* | head -1 | cut -d ' ' -f1`; \
-	$(DOCKER) exec -ti  $$container /bin/bash
+	$(DOCKER) exec -ti  $$container gosu $(shell whoami) /source/dbld/shell
 
 setup:
 	@mkdir -p dbld/build || true
