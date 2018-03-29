@@ -341,7 +341,7 @@ system_generate_app_parser(GlobalConfig *cfg, GString *sysblock, CfgArgs *args)
 }
 
 static gboolean
-system_source_generate(CfgBlockGenerator *self, GlobalConfig *cfg, CfgArgs *args, GString *sysblock)
+system_source_generate(CfgBlockGenerator *self, GlobalConfig *cfg, CfgArgs *args, GString *sysblock, const gchar *reference)
 {
   gboolean result = FALSE;
 
