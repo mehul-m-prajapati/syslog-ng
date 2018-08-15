@@ -68,8 +68,6 @@ _push_tail(LogQueue *s, LogMessage *msg, const LogPathOptions *path_options)
 {
   LogQueueRedis *self = (LogQueueRedis *) s;
 
-  msg_debug("redisq: Pushing msg to tail");
-
   g_queue_push_tail (self->qredis, msg);
   g_queue_push_tail (self->qredis, LOG_PATH_OPTIONS_TO_POINTER(path_options));
 
@@ -88,8 +86,6 @@ _pop_head(LogQueue *s, LogPathOptions *path_options)
   LogQueueRedis *self = (LogQueueRedis *) s;
   LogMessage *msg = NULL;
 
-  msg_debug("redisq: Pop msg from head");
-
   if (self->qredis->length > 0)
     {
       msg = g_queue_pop_head (self->qredis);
@@ -105,7 +101,6 @@ _pop_head(LogQueue *s, LogPathOptions *path_options)
 
       if (self->super.use_backlog)
         {
-          msg_debug("redisq: qbacklog push");
           log_msg_ref (msg);
           g_queue_push_tail (self->qbacklog, msg);
           g_queue_push_tail (self->qbacklog, LOG_PATH_OPTIONS_TO_POINTER (path_options));
@@ -123,14 +118,10 @@ _ack_backlog(LogQueue *s, gint num_msg_to_ack)
   LogPathOptions path_options = LOG_PATH_OPTIONS_INIT;
   guint i;
 
-  msg_debug("redisq: ack backlog");
-
   for (i = 0; i < num_msg_to_ack; i++)
     {
       if (self->qbacklog->length < ITEMS_PER_MESSAGE)
         return;
-
-      msg_debug("redisq: ack backlog loop");
 
       msg = g_queue_pop_head (self->qbacklog);
       POINTER_TO_LOG_PATH_OPTIONS (g_queue_pop_head (self->qbacklog), &path_options);
@@ -142,25 +133,17 @@ _ack_backlog(LogQueue *s, gint num_msg_to_ack)
 static void
 _rewind_backlog(LogQueue *s, guint rewind_count)
 {
-  LogQueueRedis *self = (LogQueueRedis *) s;
-
-  msg_debug("redisq: rewind backlog msg");
 }
 
 void
 _backlog_all(LogQueue *s)
 {
-  LogQueueRedis *self = (LogQueueRedis *) s;
-
-  msg_debug("redisq: backlog all");
 }
 
 static void
 _free(LogQueue *s)
 {
   LogQueueRedis *self = (LogQueueRedis *) s;
-
-  msg_debug("redisq: free up queue");
 
   _empty_queue(self->qredis);
   g_queue_free(self->qredis);
@@ -190,8 +173,6 @@ LogQueue *
 log_queue_redis_init_instance(GlobalConfig *cfg, const gchar *persist_name)
 {
   LogQueueRedis *self = g_new0(LogQueueRedis, 1);
-
-  msg_debug("redisq: log queue init");
 
   log_queue_init_instance(&self->super, persist_name);
   self->qredis = g_queue_new();
