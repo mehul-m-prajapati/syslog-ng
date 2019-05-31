@@ -856,6 +856,23 @@ acquire_syslog_nprv () {
 	acquire_syslog_startup_method
 }
 
+acquire_kafka_properties_file () {
+
+	[ -n "$privacy_mode" ] && return
+	
+	find ${tmpdir}/config -name "*.conf*" | \
+	while read FILE; do \
+		remove_passwords_from_file "${FILE}"
+		content=`cat $FILE | grep properties-file`
+		if [ -n "$content" ]; then
+			prop_file=$(echo $content | cut -f3 -d\( | cut -f1 -d\) | cut -f2 -d\")
+			if [ -f "$prop_file" ]; then
+				cp $prop_file ${tmpdir}/
+			fi
+		fi
+	done
+}
+
 fhs_set_linux () {
 	confdir=/etc/syslog-ng
 	vardir=/var/lib/syslog-ng
@@ -1671,5 +1688,6 @@ if [ -n "$privacy_mode" ]; then
 else
 	acquire_syslog_all
 fi
+acquire_kafka_properties_file
 [ -n "$debug_mode" ] && run_debug
 debun_final
