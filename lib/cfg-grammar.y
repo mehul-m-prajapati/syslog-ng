@@ -43,6 +43,7 @@
 #include "logthrsource/logthrsourcedrv.h"
 #include "logthrsource/logthrfetcherdrv.h"
 #include "str-utils.h"
+#include <sys/stat.h>
 
 /* uses struct declarations instead of the typedefs to avoid having to
  * include logreader/logwriter/driver.h, which defines the typedefs.  This
@@ -465,6 +466,11 @@ DNSCacheOptions *last_dns_cache_options;
 %type   <num> positive_integer64
 %type   <num> nonnegative_integer
 %type   <num> nonnegative_integer64
+%type	<cptr> path
+%type	<cptr> path_secret
+%type	<cptr> path_db
+%type	<cptr> path_config
+%type	<cptr> existing_path
 
 /* END_DECLS */
 
@@ -1079,6 +1085,32 @@ string_or_number
         | LL_FLOAT                              { $$ = strdup(lexer->token_text->str); }
         ;
 
+existing_path
+	: string
+	  {
+            struct stat buffer;
+            int ret = stat($1, &buffer);
+            CHECK_ERROR((ret == 0), @1, "File \"%s\" does not exist", $1);
+            $$ = $1;
+	  }
+	;
+
+path_secret
+    : existing_path
+    ;
+	
+path_config
+    : existing_path
+    ;
+		
+path_db
+    : existing_path
+    ;
+	
+path
+    : string
+    ;
+	
 normalized_flag
         : string                                { $$ = normalize_flag($1); free($1); }
         ;
