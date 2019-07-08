@@ -620,6 +620,9 @@ cfg_free(GlobalConfig *self)
   if (self->original_config)
     g_string_free(self->original_config, TRUE);
 
+  if (self->file_list)
+    g_list_free(self->file_list);
+
   g_free(self);
 }
 

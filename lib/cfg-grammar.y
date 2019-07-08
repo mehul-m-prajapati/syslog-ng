@@ -1091,6 +1091,7 @@ existing_path
             struct stat buffer;
             int ret = stat($1, &buffer);
             CHECK_ERROR((ret == 0), @1, "File \"%s\" does not exist", $1);
+	    configuration->file_list = g_list_append(configuration->file_list, g_strdup($1));
             $$ = $1;
 	  }
 	;
@@ -1108,7 +1109,7 @@ path_db
     ;
 	
 path
-    : string
+    : string { configuration->file_list = g_list_append(configuration->file_list, g_strdup($1)); }
     ;
 	
 normalized_flag

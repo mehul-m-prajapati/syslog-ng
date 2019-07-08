@@ -31,6 +31,7 @@
 
 #include <string.h>
 
+
 static void
 control_connection_message_log(ControlConnection *cc, GString *command, gpointer user_data)
 {
@@ -257,6 +258,21 @@ process_credentials(ControlConnection *cc, GString *command, gpointer user_data)
   control_connection_send_reply(cc, result);
 }
 
+static void
+show_files_present_in_config(ControlConnection *cc, GString *command, gpointer user_data)
+{
+  MainLoop *main_loop = (MainLoop *) user_data;
+  GlobalConfig *config = main_loop_get_current_config(main_loop);
+  GString *result = g_string_new("");
+
+  for (GList *v = config->file_list; v; v = v->next)
+    {
+      g_string_append(result, (gchar *) v->data);
+      g_string_append_c(result, '\n');
+    }
+
+  control_connection_send_reply(cc, result);
+}
 
 ControlCommand default_commands[] =
 {
@@ -267,6 +283,7 @@ ControlCommand default_commands[] =
   { "CONFIG", control_connection_config },
   { "LICENSE", show_ose_license_info },
   { "PWD", process_credentials },
+  { "LISTFILES", show_files_present_in_config },
   { NULL, NULL },
 };
 
