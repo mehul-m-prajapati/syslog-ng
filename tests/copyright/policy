@@ -220,6 +220,7 @@ modules/python/tests/test_python_reloc\.c$
 modules/json/filterx-format-json\.[ch]$
 modules/json/filterx-cache-json-file\.[ch]$
 modules/json/tests/test_filterx_format_json\.c$
+modules/file-rotation
 scl/fortigate/.*\.conf$
 scl/cee/.*\.conf$
 scl/elasticsearch/elastic-datastream.conf$
