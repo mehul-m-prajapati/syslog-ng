@@ -73,6 +73,7 @@ lib/multi-line/smart-multi-line\.fsm$
 
 cmake/Modules/FindLIBBPF\.cmake
 lib/timeutils/zonecache.[ch]$
+modules/affile/file-signals\.h
 modules/secure-logging
 modules/secure-logging/tests
 modules/secure-logging/slogencrypt
@@ -163,7 +164,6 @@ libtest
 syslog-ng(-ctl)?
 modules/java-modules/common
 modules/java/(native|proxies|src)
-modules/affile/file-signals.h
 modules/native
 modules/http/http-signals.h
 modules/http/compression\.[ch]
