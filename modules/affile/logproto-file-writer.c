@@ -176,7 +176,8 @@ log_proto_file_writer_flush(LogProtoClient *s)
   FileFlushSignalData signal_data =
   {
     .filename = file_name,
-    .size = file_size
+    .size = file_size,
+    .reopen = FALSE
   };
 
   EMIT(self->signal_slot_connector, signal_file_flush, &signal_data);
@@ -187,6 +188,7 @@ log_proto_file_writer_flush(LogProtoClient *s)
                 evt_tag_str("filename", self->filename),
                 evt_tag_int("size", file_size));
       log_writer_reopen(self->writer, &self->super);
+      signal_data.reopen = FALSE;
     }
 
   return LPS_SUCCESS;
