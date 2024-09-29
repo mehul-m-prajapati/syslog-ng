@@ -32,9 +32,9 @@ _construct_transport(FileOpener *self, gint fd)
 }
 
 static LogProtoClient *
-_construct_dst_proto(FileOpener *s, LogTransport *transport, LogProtoClientOptions *proto_options)
+_construct_dst_proto(FileOpener *s, LogTransport *transport, LogProtoClientOptions *proto_options, SignalSlotConnector *connector, const gchar *filename, FileReopener opener)
 {
-  return log_proto_file_writer_new(transport, proto_options, 0, FALSE);
+  return log_proto_file_writer_new(transport, proto_options, 0, FALSE, connector, filename, opener);
 }
 
 static gint

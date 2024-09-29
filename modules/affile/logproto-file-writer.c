@@ -167,27 +167,6 @@ log_proto_file_writer_flush(LogProtoClient *s)
       if (errno == EINTR || errno == EAGAIN)
         return LPS_SUCCESS;
 
-  /* free the previous message strings (the remaining part has been copied to the partial buffer) */
-  for (i = 0; i < self->buf_count; ++i)
-    g_free(self->buffer[i].iov_base);
-  self->buf_count = 0;
-  self->sum_len = 0;
-
-  const gchar *file_name = self->filename;
-
-  FileFlushSignalData signal_data =
-  {
-    .filename = file_name,
-    .reopener = &self->reopener
-  };
-
-  EMIT(self->file_rotation_signal, signal_file_flush, &signal_data);
-
-  return LPS_SUCCESS;
-
-write_error:
-  if (errno != EINTR && errno != EAGAIN)
-    {
       log_proto_client_msg_rewind(&self->super);
       msg_error("I/O error occurred while writing",
                 evt_tag_int("fd", self->super.transport->fd),
@@ -205,6 +184,15 @@ write_error:
     g_free(self->buffer[i].iov_base);
   self->buf_count = 0;
   self->sum_len = 0;
+
+  FileFlushSignalData signal_data =
+  {
+    .filename = self->filename,
+    .reopener = &self->reopener
+  };
+
+  EMIT(self->file_rotation_signal, signal_file_flush, &signal_data);
+
 
   return LPS_SUCCESS;
 }
